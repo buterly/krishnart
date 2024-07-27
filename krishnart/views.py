@@ -11,20 +11,25 @@ def index(request):
     return render(request, 'index.html') 
 
 def image_request(request):  
-    if request.method == 'POST':  
-        form = DrawingsForm(request.POST, request.FILES)  
-        if form.is_valid():  
-            drawing = form.save(commit=False)
 
-            drawing.date = datetime.datetime.now(datetime.UTC) 
-            drawing.save()
+    if request.user.is_authenticated:
+        if request.method == 'POST':  
+            form = DrawingsForm(request.POST, request.FILES)  
+            if form.is_valid():  
+                drawing = form.save(commit=False)
+
+                drawing.date = datetime.datetime.now(datetime.UTC) 
+                drawing.save()
 
   
             # Getting the current instance object to display in the template  
-            img_object = form.instance  
+                img_object = form.instance  
               
-            return render(request, 'image_form.html', {'form': form, 'img_obj': img_object})  
-    else:  
-        form = DrawingsForm()  
+                return render(request, 'image_form.html', {'form': form, 'img_obj': img_object})  
+        else:  
+            form = DrawingsForm()  
   
-    return render(request, 'image_form.html', {'form': form})  
+        return render(request, 'image_form.html', {'form': form})  
+
+    else:
+        return HttpResponse('Access denied. Go login first')
