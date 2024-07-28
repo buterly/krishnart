@@ -1,18 +1,42 @@
 {% extends 'base.html' %}  
       
 {% block content %}  
+
+
+<style>
+
+body {
+        height: 100%;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #55d8cfd2, #44e8acd2);
+        background-repeat: no-repeat;
+
+        margin: 0;
+        padding: 0;
+    }
+
+.container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+</style>
+
+<div class="container">
+
     <form method="post" enctype="multipart/form-data">  
         {% csrf_token %}  
         {{ form.as_p }}  
         <button type="submit">Upload</button>  
     </form>  
-  
-
+    
+    
     <form action="/members/logout" method="post">
         {% csrf_token %}
         <button type="submit">Log out</button>
     </form>
     
+</div>
   
     {% if img_obj %}  
         <h3>Succesfully uploaded : {{img_obj.caption}}</h3>  

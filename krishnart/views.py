@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from krishnart.forms import Drawings as DrawingsForm
 from .models import Drawings
 import datetime
@@ -12,6 +11,12 @@ def index(request):
         'drawings' : Drawings.objects.all()[:5]
     } 
     return render(request, 'index.html', data) 
+
+def about(request):
+    return render(request, 'about.html') 
+
+def contact(request):
+    return render(request, 'contact.html')
 
 def image_request(request):  
 
@@ -35,4 +40,4 @@ def image_request(request):
         return render(request, 'image_form.html', {'form': form})  
 
     else:
-        return HttpResponse('Access denied. Go login first')
+        return redirect('login')

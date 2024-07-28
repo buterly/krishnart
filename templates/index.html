@@ -1,28 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Gallery</title>
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-        }
+
 
         .gallery {
             display: flex;
+            flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
         }
 
         .gallery-item {
-            background-color: #fff;
-            border: 1px solid #ddd;
+            background-color: #ffffff6c;
+            border: 1px solid #ddddddb4;
             border-radius: 5px;
             margin: 10px;
             padding: 10px;
@@ -36,7 +31,7 @@
         }
 
         .gallery-item h3 {
-            font-size: 1.2em;
+            font-size: 1.1em;
             margin: 10px 0 5px;
         }
 
@@ -44,12 +39,23 @@
             margin: 5px 0;
             color: #555;
         }
-    </style>
-</head>
+        .caption {
+            font-size: 0.9em;
+        }
 
-<body>
+        .upload_date {
+            font-size: 0.5em;
+        }
+
+        h3,p::first-letter {
+        text-transform: capitalize;
+        }
+    </style>
+
 
     {% csrf_token %}
+
+
 
     <div class="gallery">
 
@@ -57,9 +63,9 @@
 
         <div class="gallery-item">
             <img src="media/{{drawing.image}}" alt="Image 2">
-            <h3>{{drawing.name}}</h3>
-            <p>{{drawing.caption}}</p>
-            <p>Uploaded on: {{drawing.date}}</p>
+            <h3>{{ drawing.name}}</h3>
+            <p>{{ drawing.caption }}</p>
+            <p class="upload_date">Uploaded on: {{drawing.date}}</p>
         </div>
         {% endfor %}
 
@@ -95,8 +101,10 @@
                             name.innerText = drawing.name;
                             const caption = document.createElement('p');
                             caption.innerText = drawing.caption;
+                            caption.setAttribute("class", "caption");
                             const date = document.createElement('p');
-                            date.innerText = drawing.date;
+                            date.innerText = "Uploaded on " + drawing.date;
+                            date.setAttribute("class", "upload_date");
                             const div = document.createElement('div')
                             div.setAttribute("class", "gallery-item");
 
@@ -183,6 +191,5 @@
             }
         })
     </script>
-</body>
 
-</html>
+{% endblock %}
