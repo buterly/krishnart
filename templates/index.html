@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,14 @@
             margin: 0;
             padding: 0;
         }
+
         .gallery {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             padding: 20px;
         }
+
         .gallery-item {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -26,42 +29,160 @@
             width: 200px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
+
         .gallery-item img {
             max-width: 100%;
             border-radius: 5px;
         }
+
         .gallery-item h3 {
             font-size: 1.2em;
             margin: 10px 0 5px;
         }
+
         .gallery-item p {
             margin: 5px 0;
             color: #555;
         }
     </style>
 </head>
+
 <body>
 
     {% csrf_token %}
 
     <div class="gallery">
 
-    {%  for drawing in drawings %}
+        {% for drawing in drawings %}
 
-    <div class="gallery-item">
-        <img src="media/{{drawing.image}}" alt="Image 2">
-        <h3>{{drawing.name}}</h3>
-        <p>{{drawing.caption}}</p>
-        <p>Uploaded on: {{drawing.date}}</p>
-    </div>
-    {% endfor %}
-        
+        <div class="gallery-item">
+            <img src="media/{{drawing.image}}" alt="Image 2">
+            <h3>{{drawing.name}}</h3>
+            <p>{{drawing.caption}}</p>
+            <p>Uploaded on: {{drawing.date}}</p>
+        </div>
+        {% endfor %}
+
     </div>
 
     <script>
 
-        
+        // const url = '127.0.0.1:8000/api/?range='
+        const url = 'api/?range='
+        const gallery = document.getElementsByClassName('gallery')[0]
+        var range = 5
+        var reachedEnd = false;
+        var isLoading = false;
 
+        async function loadImages() {
+            if (isLoading) return;
+            isLoading = true;
+            // console.log(range)
+            let reqUrl = url + range.toString()
+
+            try {
+
+                let response = await fetch(reqUrl);
+
+                if (response.status != 404) {
+                    let drawings = await response.json()
+
+                    if (drawings) {
+                        drawings.forEach(drawing => {
+                            const img = document.createElement('img');
+                            img.src = drawing.image;
+                            const name = document.createElement('h3');
+                            name.innerText = drawing.name;
+                            const caption = document.createElement('p');
+                            caption.innerText = drawing.caption;
+                            const date = document.createElement('p');
+                            date.innerText = drawing.date;
+                            const div = document.createElement('div')
+                            div.setAttribute("class", "gallery-item");
+
+                            div.appendChild(img)
+                            div.appendChild(name)
+                            div.appendChild(caption)
+                            div.appendChild(date)
+
+                            gallery.appendChild(div)
+
+                        })
+
+                        range += 5;
+                    };
+                }
+
+                else {
+                    reachedEnd = true;
+                }
+            }
+
+            catch (err) {
+                console.log('Error getting images', err)
+            }
+            finally {
+                isLoading = false;
+            }
+
+        }
+
+        // buggy function ------>
+        // async function loadImages() {
+        //     if (isLoading) return;
+        //     isLoading = true;
+        //     console.log(range)
+        //     let reqUrl = url + range.toString()
+
+        //     try {
+
+        //         let response = await fetch(reqUrl);
+
+        //         response.then((resp) => {
+        //             if (resp.status != 404) {
+        //                 let data = resp.json()
+        //                 console.log(data)
+        //                 return data
+        //             }
+        //             else
+        //                 reachedEnd = true;
+        //             return undefined
+        //         }).then((drawings) => {
+        //             if (drawings != undefined) {
+        //                 drawings.forEach(drawing => {
+        //                     const img = document.createElement('img');
+        //                     img.src = drawing.image;
+        //                     const name = document.createElement('h3');
+        //                     name.innerText = drawing.name;
+        //                     const caption = document.createElement('p');
+        //                     caption.innerText = drawing.caption;
+        //                     const date = document.createElement('p');
+        //                     date.innerText = drawing.date;
+        //                     const div = document.createElement('div')
+        //                     div.setAttribute("class", "gallery-item");
+
+        //                     div.appendChild(img)
+        //                     div.appendChild(name)
+        //                     div.appendChild(caption)
+        //                     div.appendChild(date)
+
+        //                     gallery.appendChild(div)
+
+        //                 });
+        //                 range += 5;
+        //             }
+
+        //         })
+        //     }
+        // }
+
+        window.addEventListener('scroll', async () => {
+
+            if ((window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 3) && (!reachedEnd)) {
+                await loadImages()
+            }
+        })
     </script>
 </body>
+
 </html>
