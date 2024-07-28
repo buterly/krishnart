@@ -8,7 +8,10 @@ import datetime
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html') 
+    data = {
+        'drawings' : Drawings.objects.all()[:5]
+    } 
+    return render(request, 'index.html', data) 
 
 def image_request(request):  
 

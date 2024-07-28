@@ -29,3 +29,4 @@ def logout_user(request):
     logout(request)
     # return redirect(request, 'krishnart:index') #login is name field defined in members/urls.py
     return render(request,'index.html')
+

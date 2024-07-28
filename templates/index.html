@@ -46,20 +46,22 @@
 
     <div class="gallery">
 
-        <div class="gallery-item">
-            <img src="image1.jpg" alt="Image 1">
-            <h3>Image 1</h3>
-            <p>Caption for Image 1</p>
-            <p>Uploaded on: 2024-07-27</p>
-        </div>
+    {%  for drawing in drawings %}
 
-        <div class="gallery-item">
-            <img src="image2.jpg" alt="Image 2">
-            <h3>Image 2</h3>
-            <p>Caption for Image 2</p>
-            <p>Uploaded on: 2024-07-26</p>
-        </div>
+    <div class="gallery-item">
+        <img src="media/{{drawing.image}}" alt="Image 2">
+        <h3>{{drawing.name}}</h3>
+        <p>{{drawing.caption}}</p>
+        <p>Uploaded on: {{drawing.date}}</p>
+    </div>
+    {% endfor %}
         
     </div>
+
+    <script>
+
+        
+
+    </script>
 </body>
 </html>

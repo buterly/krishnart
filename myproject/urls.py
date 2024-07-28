@@ -7,6 +7,7 @@ urlpatterns = [
     path("", include('krishnart.urls')),
     path("members/", include('django.contrib.auth.urls')),
     path("members/", include('members.urls')),
+    path("api/", include('api.urls')),
     path('admin/', admin.site.urls),
 ]
 
